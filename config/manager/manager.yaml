@@ -22,7 +22,7 @@ spec:
       - operator: Exists
       containers:
       - name: static-route-operator
-        image: REPLACE_IMAGE
+        image: staticroute-operator
         imagePullPolicy: Always
         securityContext:
           runAsUser: 2000

@@ -11,6 +11,9 @@ YAMLLINT_EXISTS:=$(shell yamllint --version 2>/dev/null)
 INSTALL_LOCATION?=$(GOPATH)/bin
 MAKEFILE_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
+BUILD_VERSION ?= v0.0.0-dev
+IMAGE_URL ?= registry.smtx.io/kubesmart-dev/staticroute-operator
+
 include Makefile.env
 include Makefile.sdk
 
@@ -109,3 +112,12 @@ dev-cleanup-operator:
 	kubectl delete -f config/rbac/role.yaml || :
 	kubectl delete -f config/rbac/role_binding.yaml || :
 	kubectl delete -f config/rbac/service_account.yaml || :
+
+
+build-image:
+	docker buildx build --builder sks-builder --push --pull \
+	--provenance=false --platform linux/amd64,linux/arm64 -t $(IMAGE_URL):$(BUILD_VERSION) \
+	--build-arg=BUILD_VERSION=$(BUILD_VERSION) .
+
+generate-manifests:
+	kustomize build config/default > manifests/manifests.yaml

@@ -271,7 +271,7 @@ func parseTargetTable(targetTableEnv string) int {
 func collectProtectedSubnets(envVars []string) []*net.IPNet {
 	protectedSubnets := []*net.IPNet{}
 	for _, e := range envVars {
-		if v := strings.SplitN(e, "=", 2); strings.Contains(v[0], "PROTECTED_SUBNET_") {
+		if v := strings.SplitN(e, "=", 2); strings.HasPrefix(v[0], "PROTECTED_SUBNET_") {
 			for _, subnet := range strings.Split(v[1], ",") {
 				_, subnetNet, err := net.ParseCIDR(strings.Trim(subnet, " "))
 				if err != nil {
