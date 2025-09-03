@@ -3,4 +3,13 @@ kind: StaticRoute
 metadata:
   name: example-static-route
 spec:
-  subnet: "192.168.0.0/24"
+  subnet: "192.168.16.0/20"
+  gateway: 10.255.0.1
+---
+apiVersion: static-route.ibm.com/v1
+kind: StaticRoute
+metadata:
+  name: example-static-route-1
+spec:
+  subnet: "192.168.16.0/24"
+  gateway: 10.255.0.254

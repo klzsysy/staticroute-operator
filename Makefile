@@ -12,7 +12,7 @@ INSTALL_LOCATION?=$(GOPATH)/bin
 MAKEFILE_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 BUILD_VERSION ?= v0.0.0-dev
-IMAGE_URL ?= registry.smtx.io/kubesmart-dev/staticroute-operator
+IMAGE_URL ?= klzsysy/staticroute-operator
 
 include Makefile.env
 include Makefile.sdk

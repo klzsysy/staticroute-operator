@@ -211,6 +211,13 @@ func mainImpl(params mainImplParams) {
 	params.logger.Info("Fallback IP for gateway selection:", "value", fallbackIP)
 
 	protectedSubnets := collectProtectedSubnets(params.osEnv())
+	if len(protectedSubnets) > 0 {
+		var subnets []string
+		for _, subnet := range protectedSubnets {
+			subnets = append(subnets, subnet.String())
+		}
+		params.logger.Info("Protected Subnets", "subnets", strings.Join(subnets, ","))
+	}
 
 	crdFound := false
 	for _, resource := range resources.APIResources {
@@ -273,7 +280,7 @@ func collectProtectedSubnets(envVars []string) []*net.IPNet {
 	for _, e := range envVars {
 		if v := strings.SplitN(e, "=", 2); strings.HasPrefix(v[0], "PROTECTED_SUBNET_") {
 			for _, subnet := range strings.Split(v[1], ",") {
-				_, subnetNet, err := net.ParseCIDR(strings.Trim(subnet, " "))
+				_, subnetNet, err := net.ParseCIDR(strings.TrimSpace(subnet))
 				if err != nil {
 					panic(err)
 				}
