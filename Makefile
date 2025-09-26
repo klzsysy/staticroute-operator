@@ -12,7 +12,8 @@ INSTALL_LOCATION?=$(GOPATH)/bin
 MAKEFILE_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 BUILD_VERSION ?= v0.0.0-dev
-IMAGE_URL ?= klzsysy/staticroute-operator
+REGISTRY_URL ?= docker.io/klzsysy
+IMAGE_URL = $(REGISTRY_URL)/staticroute-operator
 
 include Makefile.env
 include Makefile.sdk

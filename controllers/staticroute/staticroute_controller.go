@@ -176,7 +176,7 @@ func reconcileImpl(params reconcileImplParams) (res *reconcile.Result, err error
 		}
 		if !rw.statusMatch(params.options.Hostname, gateway, serr) {
 			_ = rw.removeFromStatus(params.options.Hostname)
-			if rw.addToStatus(params.options.Hostname, gateway, serr) {
+			if rw.instance.DeletionTimestamp.IsZero() && rw.addToStatus(params.options.Hostname, gateway, serr) {
 				reqLogger.Info("Update the StaticRoute status", "staticroute", rw.instance.Status)
 				if cerr := params.client.Status().Update(context.Background(), rw.instance); cerr != nil {
 					reqLogger.Error(err, "failed to update the staticroute")
@@ -379,6 +379,7 @@ func deleteOperation(params reconcileImplParams, rw *routeWrapper, logger types.
 	}
 
 	logger.Info("Deleted status for StaticRoute", "status", rw.instance.Status)
+	rw.removeFromStatus(params.options.Hostname)
 	err = params.client.Status().Update(context.Background(), rw.instance)
 	if err != nil {
 		logger.Error(err, "Unable to update status of CR")

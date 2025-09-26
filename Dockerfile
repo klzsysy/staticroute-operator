@@ -1,6 +1,7 @@
 FROM registry.smtx.io/library/golang:1.24 AS builder
 ENV GO111MODULE=on
 ARG BUILD_VERSION
+RUN go env -w GOPROXY="https://goproxy.cn|direct" GONOSUMDB=""
 WORKDIR /build
 COPY go.mod go.mod
 COPY go.sum go.sum
